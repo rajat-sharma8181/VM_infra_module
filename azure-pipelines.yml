@@ -28,7 +28,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
             backendServiceArm: 'connection_ado'
             backendAzureRmStorageAccountName: 'yuvrajstg'
             backendAzureRmContainerName: 'yuvrajcontainer'
@@ -39,7 +39,7 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
         - task: TerraformTask@5
           displayName: terraform plan
@@ -47,4 +47,4 @@ stages:
             provider: 'azurerm'
             command: 'plan'
             environmentServiceNameAzureRM: 'connection_ado'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
