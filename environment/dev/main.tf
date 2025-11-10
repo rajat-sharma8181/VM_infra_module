@@ -3,16 +3,10 @@ module "rgmod" {
     rgs = var.rg_dev
 }
 
-module "vnetmod" {
+module "netmod" {
     depends_on = [ module.rgmod ]
-    source = "../../modules/azurerm_vnet"
-    vnet = var.vnet_dev
-}
-
-module "subnetmod" {
-    depends_on = [ module.vnetmod ]
-    source = "../../modules/azurerm_subnet"
-    subnet = var.subnet_dev
+    source = "../../modules/azurerm_networking"
+    vnet = var.net_dev
 }
 
 module "pipmod" {
@@ -21,13 +15,14 @@ module "pipmod" {
     pip = var.pip_dev
 }
 
-module "nicmod" {
-    depends_on = [ module.subnetmod, module.pipmod]
-    source = "../../modules/azurerm_nic"
-    nic = var.nic_dev
-}
-
 module "nsgmod" {
+    depends_on = [ module.rgmod ]
     source = "../../modules/azurerm_nsg"
     nsg = var.nsg_dev
+}
+
+module "vmmod" {
+    depends_on = [ module.netmod ]
+    source = "../../modules/azurerm_compute"
+    vms = var.vm_dev
 }
