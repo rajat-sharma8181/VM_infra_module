@@ -1,6 +1,8 @@
 variable "rgs" {
   type = map(object({
-    rgname     = string
-    rglocation = string
+    name        = string
+    location    = string
+    managed_by  = optional(string)
+    environment = optional(string)
   }))
 }
