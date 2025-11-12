@@ -7,6 +7,6 @@ resource "azurerm_resource_group" "rg" {
   tags       = each.value.tags
 }
 
-output "rgid" {
-  value = azurerm_resource_group.rg.id
-}
+# output "rgid" {
+#   value = azurerm_resource_group.rg.id
+# }
