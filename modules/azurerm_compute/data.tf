@@ -3,12 +3,17 @@ data "azurerm_subnet" "datasubnet" {
   name                 = each.value.subnet_name
   virtual_network_name = each.value.virtual_network_name
   resource_group_name  = each.value.resource_group_name
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
 }
 
 data "azurerm_public_ip" "datapip" {
   for_each = var.vms
   name                = each.value.pip_name
   resource_group_name = each.value.resource_group_name
+<<<<<<< HEAD
 }
 
 data "azurerm_key_vault" "kv" {
@@ -27,4 +32,6 @@ data "azurerm_key_vault_secret" "vm_password" {
   for_each     = var.vms
   name         = "vmpassword"
   key_vault_id = data.azurerm_key_vault.kv[each.key].id
+=======
+>>>>>>> origin/main
 }
