@@ -8,9 +8,11 @@ variable "nsg_dev" {}
 
 variable "vm_dev" {}
 
+variable "mssql_server_dev" {}
+
 variable "mssql_db_dev" {}
 
-variable "mssql_server_dev" {}
+
 
 # variable "kv_dev" {}
 

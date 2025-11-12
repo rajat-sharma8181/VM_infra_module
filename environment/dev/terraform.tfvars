@@ -15,16 +15,14 @@ net_dev = {
     address_space       = ["10.0.0.0/16"]
     subnets = {
       subnet1 = {
-        name             = "rajat-subnet1"
+        name             = "front-subnet"
         address_prefixes = ["10.0.0.0/24"]
       }
+      subnet2 = {
+        name             = "back_subnet"
+        address_prefixes = ["10.0.1.0/24"]
+      }
     }
-  }
-  vnet2 = {
-    name                = "rajat-vnet2"
-    location            = "Central India"
-    resource_group_name = "rajat-rg"
-    address_space       = ["20.0.0.0/16"]
   }
 }
 
@@ -62,5 +60,36 @@ vm_dev = {
     offer                = "0001-com-ubuntu-server-jammy"
     sku                  = "22_04-lts"
     version              = "latest"
+  }
+}
+
+mssql_server_dev = {
+  server1 = {
+    name                         = "rajat-server"
+    resource_group_name          = "rajat-rg"
+    location                     = "central india"
+    version                      = "12.0"
+    administrator_login          = "dbadminuser"
+    administrator_login_password = "Welcome@1234"
+    minimum_tls_version          = "1.2"
+    tags = {
+      environment = "dev"
+    }
+  }
+}
+
+mssql_db_dev = {
+  sql_db1 = {
+    name         = "rajat-db"
+    collation    = "SQL_Latin1_General_CP1_CI_AS"
+    license_type = "LicenseIncluded"
+    max_size_gb  = 2
+    sku_name     = "S0"
+    enclave_name = "VBS"
+    tags = {
+      environment = "dev"
+    }
+    server_name         = "rajat-server"
+    resource_group_name = "rajat-rg"
   }
 }
