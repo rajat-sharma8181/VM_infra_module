@@ -19,13 +19,8 @@ resource "azurerm_linux_virtual_machine" "VM" {
   resource_group_name             = each.value.resource_group_name
   location                        = each.value.location
   size                            = each.value.size
-<<<<<<< HEAD
   admin_username                  = data.azurerm_key_vault_secret.vm_username[each.key].value
   admin_password                  = data.azurerm_key_vault_secret.vm_password[each.key].value
-=======
-  admin_username                  = "adminuser"
-  admin_password                  = "password@123"
->>>>>>> origin/main
   disable_password_authentication = false
   network_interface_ids           = [azurerm_network_interface.nics[each.key].id]
 

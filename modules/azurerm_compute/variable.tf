@@ -14,10 +14,7 @@ variable "vms" {
     offer                = string
     sku                  = string
     version              = string
-<<<<<<< HEAD
     vault_name           = string
-=======
->>>>>>> origin/main
   }))
 }
 
