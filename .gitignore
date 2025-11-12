@@ -1,0 +1,15 @@
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.logt
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+*.zip
+*.exe
+
+# Provider binaries
+
+.terraform/providers/
+terraform-provider-*
