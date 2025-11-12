@@ -25,7 +25,6 @@ module "vmmod" {
     depends_on = [ module.netmod ]
     source = "../../modules/azurerm_compute"
     vms = var.vm_dev
-<<<<<<< HEAD
 }
 
 module "mssqlservermod" {
@@ -51,6 +50,3 @@ module "mssqldbmod" {
 #     source = "../../modules/azurerm_keyvault_secrets"
 #     kv_secret = var.kv_secret_dev
 # }
-=======
-}
->>>>>>> origin/main

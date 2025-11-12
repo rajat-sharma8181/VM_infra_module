@@ -8,7 +8,6 @@ variable "nsg_dev" {}
 
 variable "vm_dev" {}
 
-<<<<<<< HEAD
 variable "mssql_db_dev" {}
 
 variable "mssql_server_dev" {}
@@ -16,5 +15,3 @@ variable "mssql_server_dev" {}
 # variable "kv_dev" {}
 
 # variable "kv_secret_dev" {}
-=======
->>>>>>> origin/main
