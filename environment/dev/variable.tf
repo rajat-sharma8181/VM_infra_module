@@ -12,6 +12,7 @@ variable "mssql_server_dev" {}
 
 variable "mssql_db_dev" {}
 
+variable "bastion_dev" {}
 
 
 # variable "kv_dev" {}

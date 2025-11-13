@@ -39,6 +39,13 @@ module "mssqldbmod" {
   mssql_db = var.mssql_db_dev
 }
 
+module "baistianmod" {
+    depends_on = [ module.rgmod, module.netmod, module.pipmod ]
+    source = "../../modules/azurerm_bastion"
+    jump-host = var.bastion_dev
+
+}
+  
 
 
 # module "keyvault" {
