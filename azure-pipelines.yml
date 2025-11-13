@@ -1,8 +1,7 @@
 trigger:
   branches:
     include:
-      - main
-      - features
+      - feature/*
 
 pool: Agents_pool
 
@@ -31,8 +30,8 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
             backendServiceArm: 'connection_ado'
             backendAzureRmStorageAccountName: 'yuvrajstg'
-            backendAzureRmContainerName: 'yuvrajcontainer'
-            backendAzureRmKey: 'backen.tfstate'
+            backendAzureRmContainerName: 'yuvicntr'
+            backendAzureRmKey: 'backend.tfstate'
 
         - task: TerraformTask@5
           displayName: terraform validate
