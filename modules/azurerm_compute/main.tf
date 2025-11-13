@@ -9,7 +9,7 @@ resource "azurerm_network_interface" "nics" {
     name                          = "internal"
     subnet_id                     = data.azurerm_subnet.datasubnet[each.key].id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = data.azurerm_public_ip.datapip[each.key].id
+    # public_ip_address_id          = data.azurerm_public_ip.datapip[each.key].id
   }
 }
 
