@@ -5,6 +5,7 @@ trigger:
 
 pool: Agents_pool
 
+
 stages:
   - stage: terraform_install
     displayName: terraform install
@@ -31,7 +32,7 @@ stages:
             backendServiceArm: 'connection_ado'
             backendAzureRmStorageAccountName: 'yuvrajstg'
             backendAzureRmContainerName: 'yuvicntr'
-            backendAzureRmKey: 'backend.tfstate'
+            backendAzureRmKey: '$(backendtf)'
 
         - task: TerraformTask@5
           displayName: terraform validate
