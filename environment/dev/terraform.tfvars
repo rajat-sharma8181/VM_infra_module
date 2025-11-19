@@ -3,7 +3,6 @@ rg_dev = {
     name       = "rajat-rg"
     location   = "Central India"
     managed_by = "terraform"
-
   }
 }
 
