@@ -47,10 +47,3 @@ stages:
             command: 'plan'
             environmentServiceNameAzureRM: 'connection_ado'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'apply'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            environmentServiceNameAzureRM: 'connection_ado'
