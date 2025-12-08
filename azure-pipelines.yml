@@ -1,28 +1,21 @@
-trigger:
+trigger: 
   branches:
     include:
+      - main
       - feature/*
 
 pool: Agents_pool
 
-
-stages:
-  - stage: terraform_install
-    displayName: terraform install
+stages: 
+  - stage: Build
     jobs:
-      - job: terraforminstall
-        displayName: terraform install
+      - job: terraforminitvalidateplan
+        # displayName: terraform install init validate plan job
         steps:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
 
-  - stage: terraform_init_validate_plan
-    displayName: terraform init validate plan
-    jobs:
-      - job: terraforminitvalidateplan
-        displayName: terraform init validate plan
-        steps:
         - task: TerraformTask@5
           displayName: terraform init
           inputs:
@@ -41,9 +34,21 @@ stages:
             command: 'validate'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
+  - stage: Scaning
+    # displayName: Scaning Stage
+    jobs:
+      - job: Sacning
+        steps:
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
+
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: |
+              cd $(System.DefaultWorkingDirectory)/environment
+              tflint --recursive
 
         - task: TerraformTask@5
           displayName: terraform plan
@@ -52,3 +57,8 @@ stages:
             command: 'plan'
             environmentServiceNameAzureRM: 'connection_ado'
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+
+
+
+
+  
