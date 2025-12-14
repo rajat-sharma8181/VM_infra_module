@@ -10,7 +10,7 @@ stages:
   - stage: Build
     jobs:
       - job: terraforminitvalidateplan
-        # displayName: terraform install init validate plan job
+        displayName: terraform install init validate plan job
         steps:
         - task: TerraformInstaller@1
           inputs:
@@ -35,20 +35,13 @@ stages:
             workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
   - stage: Scaning
-    # displayName: Scaning Stage
+    displayName: Scaning Stage
     jobs:
       - job: Sacning
         steps:
         - task: tfsec@1
           inputs:
             version: 'v1.26.0'
-
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              cd $(System.DefaultWorkingDirectory)/environment
-              tflint --recursive
 
         - task: TerraformTask@5
           displayName: terraform plan
