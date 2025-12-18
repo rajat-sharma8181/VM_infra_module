@@ -19,7 +19,31 @@ parameters:
       - prod
 
 stages: 
+  - stage: Scanning
+    displayName: Scanning Stage
+    jobs:
+      - job: Scanningjob
+        displayName: Scanning job
+        steps:
+        - task: tfsec@1
+          displayName: tfsec
+          continueOnError: true
+          inputs:
+            version: 'v1.26.0'
+            dir: $(workingdir)
+            publishTestResults: true
+          
+        - task: PowerShell@2
+          displayName: tflint
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            script: 'tflint'
+            workingDirectory: $(workingdir)
+
   - stage: infraprovision
+    dependsOn: Scanning
+    condition: succeeded()
     jobs:
       - job: terraforminitvalidateplan
         displayName: terraform install init validate plan job
@@ -47,31 +71,31 @@ stages:
             command: 'validate'
             workingDirectory: $(workingdir)
 
-  - stage: Scaning
-    displayName: Scaning Stage
-    dependsOn: infraprovision
-    jobs:
-      - job: Sacning
-        steps:
-        - task: tfsec@1
-          displayName: tfsec
-          continueOnError: true
+        - task: TerraformTask@5
+          displayName: plan job
           inputs:
-            version: 'v1.26.0'
-            dir: $(workingdir)
-            publishTestResults: true
-          
-        - task: PowerShell@2
-          displayName: tflint
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: 'tflint'
+            provider: 'azurerm'
+            command: 'plan'
             workingDirectory: $(workingdir)
+            environmentServiceNameAzureRM: 'infra-service1'
+
+  - stage: validation
+    displayName: validation
+    jobs:
+      - job: manualvalidation
+        displayName: manual validation job
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          displayName: vaildation
+          inputs:
+            notifyUsers: 'rajats12120@gmail.com'
+            approvers: 'rajats12120@gmail.com'
 
   - stage: Infraapply
     displayName: apply stage
-    dependsOn: Scaning
+    dependsOn: validation
+    condition: succeeded()
     jobs:
       - job: apply
         displayName: apply job
@@ -87,14 +111,6 @@ stages:
             backendAzureRmContainerName: 'rajatcontainer'
             backendAzureRmKey: 'backend.tfstate'
  
-        - task: TerraformTask@5
-          displayName: plan job
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: $(workingdir)
-            environmentServiceNameAzureRM: 'infra-service1'
-
         - task: TerraformTask@5
           displayName: apply job
           inputs:
