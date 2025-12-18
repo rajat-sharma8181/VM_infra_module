@@ -4,7 +4,19 @@ trigger:
       - main
       - feature/*
 
-pool: Agents_pool
+pool: pool_of_agents
+
+variables:
+-  name: workingdir
+   value: $(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}
+
+parameters:
+  - name: environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - prod
 
 stages: 
   - stage: Build
@@ -13,6 +25,7 @@ stages:
         displayName: terraform install init validate plan job
         steps:
         - task: TerraformInstaller@1
+          displayName: terraform install
           inputs:
             terraformVersion: 'latest'
 
@@ -21,18 +34,18 @@ stages:
           inputs:
             provider: 'azurerm'
             command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            backendServiceArm: 'connection_ado'
-            backendAzureRmStorageAccountName: 'yuvrajstg'
-            backendAzureRmContainerName: 'yuvicntr'
-            backendAzureRmKey: '$(backendtf)'
+            workingDirectory: '$(workingdir)'
+            backendServiceArm: 'infra-service1'
+            backendAzureRmStorageAccountName: 'sgprac'
+            backendAzureRmContainerName: 'rajatcontainer'
+            backendAzureRmKey: 'dev.tfstate'
 
         - task: TerraformTask@5
           displayName: terraform validate
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            workingDirectory: $(workingdir)
 
   - stage: Scaning
     displayName: Scaning Stage
@@ -40,16 +53,22 @@ stages:
       - job: Sacning
         steps:
         - task: tfsec@1
+          displayName: tfsec
           inputs:
             version: 'v1.26.0'
+            dir: $(workingdir)
+            publishTestResults: true
+          continueOnError: true
 
-        - task: TerraformTask@5
-          displayName: terraform plan
+        - task: PowerShell@2
           inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            environmentServiceNameAzureRM: 'connection_ado'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            targetType: 'inline'
+            script: 'tflint'
+            workingDirectory: $(workingdir)
+
+        
+
+
 
 
 
