@@ -1,4 +1,4 @@
-variable "rg_dev" {  
+variable "rg_prod" {
     type = map(object({
     name        = string
     location    = string
@@ -7,7 +7,7 @@ variable "rg_dev" {
   }))
 }
 
-variable "net_dev" {  
+variable "net_prod" {
     type = map(object({
     name                = string
     location            = string
@@ -18,10 +18,10 @@ variable "net_dev" {
       address_prefixes = list(string)
     })), {})
   }))
-  }
+}
 
-variable "pip_dev" {
-      type = map(object({
+variable "pip_prod" {
+    type = map(object({
     name                = string
     resource_group_name = string
     location            = string
@@ -29,7 +29,7 @@ variable "pip_dev" {
   }))
 }
 
-variable "nsg_dev" {  
+variable "nsg_prod" {
     type = map(object({
     name                = string
     location            = string
@@ -37,7 +37,7 @@ variable "nsg_dev" {
   }))
 }
 
-variable "vm_dev" {  
+variable "vm_prod" {
     type = map(object({
     nic_name             = string
     location             = string
@@ -59,8 +59,7 @@ variable "vm_dev" {
   }))
 }
 
-
-variable "mssql_server_dev" {  
+variable "mssql_server_prod" {
     type = map(object({
     name                         = string
     resource_group_name          = string
@@ -73,8 +72,8 @@ variable "mssql_server_dev" {
   }))
 }
 
-variable "mssql_db_dev" {
-      type = map(object({
+variable "mssql_db_prod" {
+    type = map(object({
     name                = string
     collation           = optional(string)
     license_type        = optional(string)
@@ -87,8 +86,8 @@ variable "mssql_db_dev" {
   }))
 }
 
-variable "bastion_dev" {
-      type = map(object({
+variable "bastion_prod" {
+    type = map(object({
     bation_host_name      = string
     location              = string
     resource_group_name   = string
@@ -100,6 +99,6 @@ variable "bastion_dev" {
 }
 
 
-# variable "kv_dev" {}
+# variable "kv_prod" {}
 
-# variable "kv_secret_dev" {}
+# variable "kv_secret_prod" {}
