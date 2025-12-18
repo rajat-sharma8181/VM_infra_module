@@ -19,7 +19,7 @@ parameters:
       - prod
 
 stages: 
-  - stage: Build
+  - stage: infraprovision
     jobs:
       - job: terraforminitvalidateplan
         displayName: terraform install init validate plan job
