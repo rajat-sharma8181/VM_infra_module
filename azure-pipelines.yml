@@ -4,7 +4,7 @@ trigger:
       - main
       - feature/*
 
-pool: pool_of_agents
+pool: Agents_pool
 
 variables:
 -  name: workingdir
