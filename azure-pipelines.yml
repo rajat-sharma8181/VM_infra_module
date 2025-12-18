@@ -38,7 +38,7 @@ stages:
             backendServiceArm: 'infra-service1'
             backendAzureRmStorageAccountName: 'sgprac'
             backendAzureRmContainerName: 'rajatcontainer'
-            backendAzureRmKey: 'dev.tfstate'
+            backendAzureRmKey: 'backend.tfstate'
 
         - task: TerraformTask@5
           displayName: terraform validate
@@ -49,6 +49,7 @@ stages:
 
   - stage: Scaning
     displayName: Scaning Stage
+    dependsOn: infraprovision
     jobs:
       - job: Sacning
         steps:
@@ -60,7 +61,6 @@ stages:
             dir: $(workingdir)
             publishTestResults: true
           
-
         - task: PowerShell@2
           displayName: tflint
           continueOnError: true
@@ -69,9 +69,39 @@ stages:
             script: 'tflint'
             workingDirectory: $(workingdir)
 
-        
+  - stage: Infraapply
+    displayName: apply stage
+    dependsOn: Scaning
+    jobs:
+      - job: apply
+        displayName: apply job
+        steps:
+        - task: TerraformTask@5
+          displayName: init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: $(workingdir)
+            backendServiceArm: 'infra-service1'
+            backendAzureRmStorageAccountName: 'sgprac'
+            backendAzureRmContainerName: 'rajatcontainer'
+            backendAzureRmKey: 'backend.tfstate'
+ 
+        - task: TerraformTask@5
+          displayName: plan job
+          inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            workingDirectory: $(workingdir)
+            environmentServiceNameAzureRM: 'infra-service1'
 
-
+        - task: TerraformTask@5
+          displayName: apply job
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: $(workingdir)
+            environmentServiceNameAzureRM: 'infra-service1'
 
 
 
