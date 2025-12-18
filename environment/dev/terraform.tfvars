@@ -63,8 +63,8 @@ vm_dev = {
     offer      = "0001-com-ubuntu-server-jammy"
     sku        = "22_04-lts"
     version    = "latest"
-    vault_name = "yuvivault"
-    resource_group_name2 = "yuvi"
+    vault_name = "cred12"
+    resource_group_name2 = "rgprac"
   }
 }
 
