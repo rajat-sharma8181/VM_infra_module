@@ -1,0 +1,11 @@
+steps:
+- task: TerraformTask@5
+          displayName: terraform init
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(workingdir)'
+            backendServiceArm: 'infra-service1'
+            backendAzureRmStorageAccountName: 'sgprac'
+            backendAzureRmContainerName: 'rajatcontainer'
+            backendAzureRmKey: 'backend.tfstate'
