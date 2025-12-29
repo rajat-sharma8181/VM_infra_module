@@ -1,49 +1,111 @@
-trigger:
-  branches:
-    include:
-      - feature/*
+trigger: none
+  # branches:
+  #   include:
+  #     - main
+  #     - feature/*
 
 pool: Agents_pool
 
-stages:
-  - stage: terraforminstall
-    displayName: terraform install
+variables:
+-  name: workingdir
+   value: $(System.DefaultWorkingDirectory)/environment/${{parameters.environment}}
+
+parameters:
+  - name: environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - prod
+
+stages: 
+  - stage: Scanning
+    displayName: Scanning Stage
     jobs:
-      - job: terraforminstall
-        displayName: terraform install
+      - job: Scanningjob
+        displayName: Scanning job
+        steps:
+        - task: tfsec@1
+          displayName: tfsec
+          continueOnError: true
+          inputs:
+            version: 'v1.26.0'
+            dir: $(workingdir)
+            publishTestResults: true
+          
+        - task: PowerShell@2
+          displayName: tflint
+          continueOnError: true
+          inputs:
+            targetType: 'inline'
+            script: 'tflint'
+            workingDirectory: $(workingdir)
+
+  - stage: infraprovision
+    dependsOn: Scanning
+    condition: succeeded()
+    jobs:
+      - job: terraforminitvalidateplan
+        displayName: terraform install init validate plan job
         steps:
         - task: TerraformInstaller@1
+          displayName: terraform install
           inputs:
             terraformVersion: 'latest'
 
-  - stage: terraforminitvalidateplan
-    displayName: terraform init validate plan
-    jobs:
-      - job: terraforminitvalidateplan
-        displayName: terraform init validate plan
-        steps:
-        - task: TerraformTask@5
-          displayName: terraform init
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-            backendServiceArm: 'connection_ado'
-            backendAzureRmStorageAccountName: 'yuvrajstg'
-            backendAzureRmContainerName: 'yuvicntr'
-            backendAzureRmKey: 'backend.tfstate'
+        - template: tamplate/init.yaml
 
         - task: TerraformTask@5
           displayName: terraform validate
           inputs:
             provider: 'azurerm'
             command: 'validate'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            workingDirectory: $(workingdir)
 
         - task: TerraformTask@5
-          displayName: terraform plan
+          displayName: plan job
           inputs:
             provider: 'azurerm'
             command: 'plan'
-            environmentServiceNameAzureRM: 'connection_ado'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            workingDirectory: $(workingdir)
+            environmentServiceNameAzureRM: 'infra-service1'
+
+  - stage: validation
+    displayName: validation
+    jobs:
+      - job: manualvalidation
+        displayName: manual validation job
+        pool: server
+        steps:
+        - task: ManualValidation@1
+          displayName: vaildation
+          inputs:
+            notifyUsers: 'rajats12120@gmail.com'
+            approvers: 'rajats12120@gmail.com'
+
+  # - stage: Infraapply
+  #   displayName: apply stage
+  #   dependsOn: validation
+  #   condition: succeeded()
+  #   jobs:
+  #     - job: apply
+  #       displayName: apply job
+  #       steps:
+  #       - task: TerraformTask@5
+  #         displayName: init
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'init'
+  #           workingDirectory: $(workingdir)
+  #           backendServiceArm: 'infra-service1'
+  #           backendAzureRmStorageAccountName: 'sgprac'
+  #           backendAzureRmContainerName: 'rajatcontainer'
+  #           backendAzureRmKey: 'backend.tfstate'
+ 
+  #       - task: TerraformTask@5
+  #         displayName: apply job
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'apply'
+  #           workingDirectory: $(workingdir)
+  #           environmentServiceNameAzureRM: 'infra-service1'
