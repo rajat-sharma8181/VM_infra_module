@@ -25,21 +25,9 @@ stages:
       - job: Scanningjob
         displayName: Scanning job
         steps:
-        - task: tfsec@1
-          displayName: tfsec
-          continueOnError: true
-          inputs:
-            version: 'v1.26.0'
-            dir: $(workingdir)
-            publishTestResults: true
+        - template: template/tfsec.yaml
           
-        - task: PowerShell@2
-          displayName: tflint
-          continueOnError: true
-          inputs:
-            targetType: 'inline'
-            script: 'tflint'
-            workingDirectory: $(workingdir)
+        - template: template/tflint.yaml
 
   - stage: infraprovision
     dependsOn: Scanning
@@ -70,18 +58,18 @@ stages:
             workingDirectory: $(workingdir)
             environmentServiceNameAzureRM: 'infra-service1'
 
-  - stage: validation
-    displayName: validation
-    jobs:
-      - job: manualvalidation
-        displayName: manual validation job
-        pool: server
-        steps:
-        - task: ManualValidation@1
-          displayName: vaildation
-          inputs:
-            notifyUsers: 'rajats12120@gmail.com'
-            approvers: 'rajats12120@gmail.com'
+  # - stage: validation
+  #   displayName: validation
+  #   jobs:
+  #     - job: manualvalidation
+  #       displayName: manual validation job
+  #       pool: server
+  #       steps:
+  #       - task: ManualValidation@1
+  #         displayName: vaildation
+  #         inputs:
+  #           notifyUsers: 'rajats12120@gmail.com'
+  #           approvers: 'rajats12120@gmail.com'
 
   # - stage: Infraapply
   #   displayName: apply stage
@@ -91,16 +79,7 @@ stages:
   #     - job: apply
   #       displayName: apply job
   #       steps:
-  #       - task: TerraformTask@5
-  #         displayName: init
-  #         inputs:
-  #           provider: 'azurerm'
-  #           command: 'init'
-  #           workingDirectory: $(workingdir)
-  #           backendServiceArm: 'infra-service1'
-  #           backendAzureRmStorageAccountName: 'sgprac'
-  #           backendAzureRmContainerName: 'rajatcontainer'
-  #           backendAzureRmKey: 'backend.tfstate'
+  #       - template: tamplate/init.yaml
  
   #       - task: TerraformTask@5
   #         displayName: apply job
