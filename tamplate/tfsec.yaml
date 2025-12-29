@@ -1,0 +1,8 @@
+steps:
+- task: tfsec@1
+  displayName: tfsec
+  continueOnError: true
+  inputs:
+    version: 'v1.26.0'
+    dir: $(workingdir)
+    publishTestResults: true
