@@ -26,6 +26,8 @@ stages:
         displayName: Scanning job
         steps:
         - template: template/tfsec.yaml
+
+        - template: template/tflint.yaml
           
 
   - stage: infraprovision
