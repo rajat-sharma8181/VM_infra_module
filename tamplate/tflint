@@ -1,0 +1,8 @@
+steps:
+- task: PowerShell@2
+  displayName: tflint
+  continueOnError: true
+  inputs:
+    targetType: 'inline'
+    script: 'tflint'
+    workingDirectory: $(workingdir)
