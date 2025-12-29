@@ -19,15 +19,14 @@ parameters:
       - prod
 
 stages: 
-  - stage: Scanning
-    displayName: Scanning Stage
-    jobs:
-      - job: Scanningjob
-        displayName: Scanning job
-        steps:
-        - template: template/tfsec.yaml
+#   - stage: Scanning
+#     displayName: Scanning Stage
+#     jobs:
+#       - job: Scanningjob
+#         displayName: Scanning job
+#         steps:
+#         - template: template/tfsec.yaml
           
-        - template: template/tflint.yaml
 
   - stage: infraprovision
     dependsOn: Scanning
@@ -41,7 +40,7 @@ stages:
           inputs:
             terraformVersion: 'latest'
 
-        - template: tamplate/init.yaml
+        - template: template/init.yaml
 
         - task: TerraformTask@5
           displayName: terraform validate
