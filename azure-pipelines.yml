@@ -10,13 +10,13 @@ variables:
 -  name: workingdir
    value: $(System.DefaultWorkingDirectory)/environment/dev
 
-# parameters:
-#   - name: environment
-#     type: string
-#     default: dev
-#     values:
-#       - dev
-#       - prod
+parameters:
+  - name: environment
+    type: string
+    default: dev
+    values:
+      - dev
+      - prod
 
 stages: 
   - stage: Scanning
