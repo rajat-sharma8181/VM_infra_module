@@ -22,13 +22,23 @@ stages:
   - stage: Scanning
     displayName: Scanning Stage
     jobs:
-      - job: Scanningjob
-        displayName: Scanning job
+      - job: tfsec
+        displayName: tfsec job
         steps:
         - template: template/tfsec.yaml
 
+      - job: tflint
+        displayName: tflint job
+        steps:
         - template: template/tflint.yaml
-          
+
+      - job: checkov
+        displayName: checkov job
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'checkov -d "dev"'
 
   - stage: infraprovision
     dependsOn: Scanning
