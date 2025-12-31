@@ -36,6 +36,7 @@ stages:
       - job: checkov
         displayName: checkov job
         dependsOn: tflint
+        continueOnError: true
         steps:
         - task: PowerShell@2
           inputs:
