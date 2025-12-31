@@ -29,16 +29,20 @@ stages:
 
       - job: tflint
         displayName: tflint job
+        dependsOn: tfsec
         steps:
         - template: template/tflint.yaml
 
       - job: checkov
         displayName: checkov job
+        dependsOn: tflint
         steps:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'checkov -d "dev"'
+            script: 'checkov -d .'
+
+
 
   - stage: infraprovision
     dependsOn: Scanning
