@@ -98,7 +98,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              infracost auth login
+              infracost auth login --ci
               infracost breakdown --path '$(workingdir)'
             workingDirectory: '$(workingdir)'
 
