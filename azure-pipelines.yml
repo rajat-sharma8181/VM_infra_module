@@ -44,6 +44,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: 'checkov -d .'
+            workingDirectory: $(workingdir)
 
 ##########################################
 
@@ -95,8 +96,10 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'infracost breakdown --path tfplan --format table'
-            workingDirectory: $(workingdir)
+            script: |
+              infracost auth login
+              infracost breakdown --path tfplan --format table
+            workingDirectory: '$(workingdir)'
 
 ################################################
 
