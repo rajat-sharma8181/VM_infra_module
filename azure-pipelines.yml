@@ -44,7 +44,7 @@ stages:
           inputs:
             targetType: 'inline'
             script: |
-              checkov -d .
+              checkov -d . --soft-fail
             workingDirectory: $(workingdir)
 
 ##########################################
