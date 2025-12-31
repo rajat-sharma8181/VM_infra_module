@@ -43,63 +43,64 @@ stages:
         - task: PowerShell@2
           inputs:
             targetType: 'inline'
-            script: 'checkov -d .'
+            script: |
+              checkov -d .
             workingDirectory: $(workingdir)
 
 ##########################################
 
-  - stage: infraprovision
-    dependsOn: Scanning
-    condition: succeeded()
-    jobs:
-      - job: terraforminitvalidateplan
-        displayName: terraform install init validate plan job
-        steps:
-        - task: TerraformInstaller@1
-          displayName: terraform install
-          inputs:
-            terraformVersion: 'latest'
+  # - stage: infraprovision
+  #   dependsOn: Scanning
+  #   condition: succeeded()
+  #   jobs:
+  #     - job: terraforminitvalidateplan
+  #       displayName: terraform install init validate plan job
+  #       steps:
+  #       - task: TerraformInstaller@1
+  #         displayName: terraform install
+  #         inputs:
+  #           terraformVersion: 'latest'
 
-        - template: template/init.yaml
+  #       - template: template/init.yaml
 
-        - task: TerraformTask@5
-          displayName: terraform validate
-          inputs:
-            provider: 'azurerm'
-            command: 'validate'
-            workingDirectory: $(workingdir)
+  #       - task: TerraformTask@5
+  #         displayName: terraform validate
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'validate'
+  #           workingDirectory: $(workingdir)
 
-        - task: TerraformTask@5
-          displayName: plan job
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(workingdir)'
-            environmentServiceNameAzureRM: 'infra_service1'
+  #       - task: TerraformTask@5
+  #         displayName: plan job
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'plan'
+  #           workingDirectory: '$(workingdir)'
+  #           environmentServiceNameAzureRM: 'infra_service1'
 
 ############################################
 
-  - stage: infracost
-    displayName: infracost stage
-    jobs:
-      - job: infracost
-        displayName: infracost job
-        steps:
-        - template: template/init.yaml
+  # - stage: infracost
+  #   displayName: infracost stage
+  #   jobs:
+  #     - job: infracost
+  #       displayName: infracost job
+  #       steps:
+  #       - template: template/init.yaml
 
-        - task: TerraformTask@5
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            environmentServiceNameAzureRM: 'infra_service1'
-            workingDirectory: '$(workingdir)'
+  #       - task: TerraformTask@5
+  #         inputs:
+  #           provider: 'azurerm'
+  #           command: 'plan'
+  #           environmentServiceNameAzureRM: 'infra_service1'
+  #           workingDirectory: '$(workingdir)'
 
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: |
-              infracost auth login --ci
-              infracost breakdown --path '$(workingdir)'
+  #       - task: PowerShell@2
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: |
+  #             infracost auth login --ci
+  #             infracost breakdown --path '$(workingdir)'
 
 
 ################################################
