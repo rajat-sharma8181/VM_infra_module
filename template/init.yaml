@@ -5,7 +5,7 @@ steps:
     provider: 'azurerm'
     command: 'init'
     workingDirectory: '$(workingdir)'
-    backendServiceArm: 'infra-service1'
+    backendServiceArm: 'infra_service1'
     backendAzureRmStorageAccountName: 'sgprac'
     backendAzureRmContainerName: 'rajatcontainer'
     backendAzureRmKey: 'backend.tfstate'
