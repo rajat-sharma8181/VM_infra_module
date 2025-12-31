@@ -100,7 +100,7 @@ stages:
             script: |
               infracost auth login --ci
               infracost breakdown --path '$(workingdir)'
-            workingDirectory: '$(workingdir)'
+            # workingDirectory: '$(workingdir)'
 
 ################################################
 
