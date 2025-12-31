@@ -21,30 +21,30 @@ parameters:
 ############################################
 
 stages: 
-  - stage: Scanning
-    displayName: Scanning Stage
-    jobs:
-      - job: tfsec
-        displayName: tfsec job
-        steps:
-        - template: template/tfsec.yaml
+  # - stage: Scanning
+  #   displayName: Scanning Stage
+  #   jobs:
+  #     - job: tfsec
+  #       displayName: tfsec job
+  #       steps:
+  #       - template: template/tfsec.yaml
 
-      - job: tflint
-        displayName: tflint job
-        dependsOn: tfsec
-        steps:
-        - template: template/tflint.yaml
+  #     - job: tflint
+  #       displayName: tflint job
+  #       dependsOn: tfsec
+  #       steps:
+  #       - template: template/tflint.yaml
 
-      - job: checkov
-        displayName: checkov job
-        dependsOn: tflint
-        continueOnError: true
-        steps:
-        - task: PowerShell@2
-          inputs:
-            targetType: 'inline'
-            script: 'checkov -d .'
-            workingDirectory: $(workingdir)
+  #     - job: checkov
+  #       displayName: checkov job
+  #       dependsOn: tflint
+  #       continueOnError: true
+  #       steps:
+  #       - task: PowerShell@2
+  #         inputs:
+  #           targetType: 'inline'
+  #           script: 'checkov -d .'
+  #           workingDirectory: $(workingdir)
 
 ##########################################
 
@@ -99,7 +99,7 @@ stages:
             targetType: 'inline'
             script: |
               infracost auth login
-              infracost breakdown --path tfplan --format table
+              infracost breakdown --path '$(workingdir)'
             workingDirectory: '$(workingdir)'
 
 ################################################
